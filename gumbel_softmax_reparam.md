@@ -11,7 +11,7 @@ $$\begin{aligned}
                                  &= \mathbb{E}_{p(z)}[\nabla_\theta f_\theta(z)]
 \end{aligned}$$
 
-It is observable here that the gradient w.r.t. $\theta$ of the expectation is equal to the expectation of gradient w.r.t. $\theta$. However, in the case of MolGAN or other stochastic networks like the VAE, part of the set of parameters $\theta$ includes the parameters to the distribution $p(z)$. Hence this distribution should be written as $p_\theta(z)$ as it is parameterized by $\theta$. In a situation like this, a problem arises. Taking a look at the differentiation of $$:
+It is observable here that the gradient w.r.t. $\theta$ of the expectation is equal to the expectation of gradient w.r.t. $\theta$. However, in the case of MolGAN or other stochastic networks like the VAE, part of the set of parameters $\theta$ includes the parameters to the distribution $p(z)$. Hence this distribution should be written as $p_\theta(z)$ as it is parameterized by $\theta$. In a situation like this, a problem arises:
 $$\begin{aligned}
   \nabla_\theta \mathbb{E}_{p_\theta(z)}[f_\theta(z)] &= \nabla_\theta\left[\int_z p_\theta(z)f_\theta(z)dz\right]\\
                                  &= \int_z \nabla_\theta\left[p_\theta(z)f_\theta(z)\right]dz\\
@@ -62,14 +62,14 @@ P(K | \{\pi_{k'}\}) &= \int_{z_k} P(z_k)P(K | z_k, \{\pi_{k'}\})dz_k\\
 &= \int_{z_k} \exp\{-z_k\}\cdot\pi_k\cdot\exp\{-\exp\{-z_k\}\}dz_k \tag{3}\\
 \end{aligned}$$
 
-To compute this integration, we notice the following. Let $U \sim Uniform(0, 1)$, $Y = -\log\log\displaystyle\frac{1}{U}$. Then $Y \sim Gumbel(0, 1)$. Therefore $U \in [0, 1] \implies Y \in [0, \infty)$. We proceed to compute the above integral.
+To compute this integration, we notice the following. Let $U \sim Uniform(0, 1)$, $Y = -\log\log\displaystyle\frac{1}{U}$. Then $Y \sim Gumbel(0, 1)$. Therefore $U \in [0, 1] \implies Y \in (-\infty, \infty)$. We proceed to compute the above integral.
 
 Let $u = -\exp\{-z_k\}$. Then $du = \exp\{-z_k\}dz_k \iff \displaystyle\frac{1}{\exp\{-z_k\}}du = dz_k$. Using this substitution into the last line of $(3)$, we have:
 
 $$\begin{aligned}
-P(K | \{\pi_{k'}\}) &= \pi_k \int_0^\infty \exp\{u\}du\\
-&= \pi_k\cdot \displaystyle\lim_{R \rightarrow \infty} \bigg[-\exp\{-z_k\}\bigg]^R_0 \\
-&= \pi_k \cdot \displaystyle\lim_{R \rightarrow \infty} \left[-\frac{1}{\exp\{R\}} + 1\right]\\
+P(K | \{\pi_{k'}\}) &= \pi_k \int_{-\infty}^\infty \exp\{u\}du\\
+&= \pi_k\cdot \displaystyle\lim_{R \rightarrow \infty} \bigg[\exp\{-\exp\{-z_k\}\}\bigg]^R_{-R} \\
+&= \pi_k \cdot \displaystyle\lim_{R \rightarrow \infty} \left[\frac{1}{\exp\{\exp\{-R\}\}} - \frac{1}{\exp\{\exp\{R\}\}}\right]\\
 &= \pi_k
 \end{aligned}$$
 
