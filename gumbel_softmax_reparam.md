@@ -34,7 +34,7 @@ Let $C$ be a random variable distributed categorically with class probabilities 
   1. Sample $U \sim Uniform(0, 1)$
   2. Return $i$ such that: $\verb|cumsum(i)| = \sum_{k = 1}^i \pi_k \leq U$ and $\forall j, \verb|cumsum(j)| \leq U \implies j \leq i$.
 
-Essentially, we compute $\displaystyle\max_i \left\{{\displaystyle\sum_{k = 1}^i \pi_k \leq U}\right\}$ where $U \sim Uniform(0, 1)$. Here, the returned $i$ is the class index of the categorical distribution. 
+Essentially, we compute $\displaystyle\max_i \left\{\displaystyle\sum_{k = 1}^i \pi_k \leq U\right\}$ where $U \sim Uniform(0, 1)$. Here, the returned $i$ is the class index of the categorical distribution. 
 
 The $max$ operation is not differentiable. Hence, if the sampling is done in this manner in a network like MolGAN, it would not be possible to backpropagate through the layers and compute the gradients to optimize the parameters. Thus, the reparametrization trick cannot be applied here, because the class probabilities of a categorical distribution cannot be explicitly used a differentiable transformation to create a deterministic output that can be backpropagated through.
 
